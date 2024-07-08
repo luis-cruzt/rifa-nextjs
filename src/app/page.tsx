@@ -26,7 +26,7 @@ const formSchema = z.object({
   number: z.string(),
 });
 
-const pb = new PocketBase('http://127.0.0.1:8090');
+const pb = new PocketBase('https://pocketbase-production-fbf4.up.railway.app');
 
 export default function Home() {
 
