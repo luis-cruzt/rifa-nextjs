@@ -23,8 +23,12 @@ const formSchema = z.object({
   name: z.string().min(2, {
     message: "Ingresa tu nombre completo",
   }),
-  number: z.string(),
-  phone: z.string(),
+  number: z.string().min(1, {
+    message: "Ingresa el número que deseas",
+  }),
+  phone: z.string().min(1, {
+    message: "Ingresa el número de contacto",
+  })
 });
 
 const pb = new PocketBase('https://pocketbase-production-fbf4.up.railway.app');
@@ -89,9 +93,9 @@ export default function Home() {
                 name="phone"
                 render={({ field }) => (
                   <FormItem className="mb-4">
-                    <FormLabel>Número de teléfono</FormLabel>
+                    <FormLabel>Número de contacto</FormLabel>
                     <FormControl>
-                      <Input placeholder="Ingresa tu número de teléfono"
+                      <Input placeholder="Ingresa el número de contacto"
                       type="number"
                       {...field} />
                     </FormControl>                    
