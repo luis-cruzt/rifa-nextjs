@@ -42,6 +42,11 @@ export default function Home() {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {    
+    if(parseInt(values.number) < 0 || parseInt(values.number) > 80){
+      toast.error("Ingresa un número entre 1 y 80.");
+      return;
+    }
+
     const data = {
       "name": values.name,
       "number": values.number,
