@@ -18,6 +18,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { useRouter } from 'next/navigation'
+import { useState } from "react";
+import { ReloadIcon } from "@radix-ui/react-icons";
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -35,7 +37,7 @@ const pb = new PocketBase('https://pocketbase-production-fbf4.up.railway.app');
 
 export default function Home() {
 
-  const router = useRouter()
+  const [isLoading, setIsLoading] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -49,7 +51,7 @@ export default function Home() {
     if(parseInt(values.number) < 0 || parseInt(values.number) > 80){
       toast.error("Ingresa un número entre 1 y 80.");
       return;
-    }
+    }    
 
     const data = {
       "name": values.name,
@@ -57,10 +59,13 @@ export default function Home() {
       "phone": values.phone,
   };
     try {
+      setIsLoading(true);
       const record = await pb.collection('raffle_numbers').create(data);      
-      router.push('/exito')
-      form.reset();
-    } catch (error: any) {      
+      setIsLoading(false);
+      toast.success(`Número ${values.number} apartado con éxito.`);
+      form.setValue('number', '');
+    } catch (error: any) {
+      setIsLoading(false);      
       if(error.data.data.number.code == 'validation_not_unique'){
         toast.error("El número ya ha sido apartado.")
       }
@@ -71,8 +76,8 @@ export default function Home() {
     <div className="relative flex min-h-screen flex-col justify-center bg-white py-6 px-6">
       <div className="relative sm:mx-auto">
         <div className="mx-auto md:w-96">          
-          <h3 className="text-2xl font-semibold leading-none tracking-tight mb-2">Segunda rifa por Aitana</h3>
-          <p className="text-sm text-muted-foreground mb-4">Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos error dolorem tempora quis, voluptatum nam nihil iure animi cum, minus.</p>
+          <h3 className="text-2xl font-semibold leading-none tracking-tight mb-2">Rifa por Aitana</h3>
+          <p className="text-sm text-muted-foreground mb-4">Apoyemos a nuestra compañerita Aitana, todo suma cuando se da desde el corazón ❤️</p>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
               <FormField
@@ -110,7 +115,7 @@ export default function Home() {
                   <FormItem className="mb-8">
                     <FormLabel>Número deseado</FormLabel>
                     <FormControl>
-                      <Input placeholder="Ingresa el número que quieres" {...field} />
+                      <Input placeholder="Ingresa el número que quieres" type="tel" {...field} />
                     </FormControl>
                     <FormDescription>
                       Ingresa el número deseado entre el 1 y el 80.
@@ -119,7 +124,10 @@ export default function Home() {
                   </FormItem>
                 )}
               />
-              <Button type="submit">Apartar número</Button>
+              <Button type="submit" disabled={isLoading}>
+                {isLoading && <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />}
+                Apartar número
+                </Button>
             </form>
           </Form>
           {/* <div className="grid grid-cols-10 gap-x-12 gap-y-4 mt-6">
