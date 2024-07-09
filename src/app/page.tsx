@@ -24,6 +24,7 @@ const formSchema = z.object({
     message: "Ingresa tu nombre completo",
   }),
   number: z.string(),
+  phone: z.string(),
 });
 
 const pb = new PocketBase('https://pocketbase-production-fbf4.up.railway.app');
@@ -36,6 +37,7 @@ export default function Home() {
     defaultValues: {
       name: "",
       number: "",
+      phone: "",
     },
   });
 
@@ -43,10 +45,10 @@ export default function Home() {
     const data = {
       "name": values.name,
       "number": values.number,
+      "phone": values.phone,
   };
     try {
-      const record = await pb.collection('raffle_numbers').create(data);
-      console.log('Record created: ', record);
+      const record = await pb.collection('raffle_numbers').create(data);      
       router.push('/exito')
       form.reset();
     } catch (error: any) {      
@@ -72,6 +74,21 @@ export default function Home() {
                     <FormLabel>Nombre Completo</FormLabel>
                     <FormControl>
                       <Input placeholder="Ingresa tu nombre completo" {...field} />
+                    </FormControl>                    
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="phone"
+                render={({ field }) => (
+                  <FormItem className="mb-4">
+                    <FormLabel>Número de teléfono</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Ingresa tu número de teléfono"
+                      type="number"
+                      {...field} />
                     </FormControl>                    
                     <FormMessage />
                   </FormItem>
