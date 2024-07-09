@@ -68,9 +68,9 @@ export default function Home() {
   }
 
   return (
-    <div className="relative flex min-h-screen flex-col justify-center bg-white overflow-hidden py-6 px-6">
+    <div className="relative flex min-h-screen flex-col justify-center bg-white py-6 px-6">
       <div className="relative sm:mx-auto">
-        <div className="mx-auto w-96">          
+        <div className="mx-auto md:w-96">          
           <h3 className="text-2xl font-semibold leading-none tracking-tight mb-2">Segunda rifa por Aitana</h3>
           <p className="text-sm text-muted-foreground mb-4">Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos error dolorem tempora quis, voluptatum nam nihil iure animi cum, minus.</p>
           <Form {...form}>
